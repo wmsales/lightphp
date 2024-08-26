@@ -6,7 +6,7 @@ define('VIEWS', APP.'Views'.DIRECTORY_SEPARATOR);
 define('PUBLIC_FOLDER', 'public');
 define('PUBLIC_FOLDER_PATH', ROOT.PUBLIC_FOLDER.DIRECTORY_SEPARATOR);
 
-require ROOT.'vendor/autoload.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 
 use Core\Router;
 

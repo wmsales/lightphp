@@ -3,9 +3,6 @@
 
 Inicia el desarrollo de tu aplicación PHP partiendo del modelo de MVC, con los aspectos básicos.
 
-
-
-
 ## Instalación
 
 Para usar este proyecto toma en cuenta que debes tener PHP 7.5 o superior.
@@ -17,6 +14,10 @@ Luego:
 
 ```bash
   composer dump-autoload 
+``` 
+Carga el ORM:
+```bash
+  composer require catfan/medoo
 ``` 
 
 

@@ -1,0 +1,24 @@
+{
+    "name": "wmsales/lightphp",
+    "description": "Liberia Ligera para PHP (modelo MVC)",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "wmsales",
+            "email": "salesjerez@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+	"require": {
+		"php": ">=7.0"
+	},
+    "autoload":
+    {
+        "psr-4":
+        {
+            "Core\\": "Core/",
+            "App\\" : "App/"
+        }
+    }
+}

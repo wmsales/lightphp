@@ -8,10 +8,10 @@ class View
 {
     public static function render($views = [], $args = [], $header = 'templates/header', $footer = 'templates/footer')
     {
-        $baseUrl = Util::baseUrl();
+        $args['baseURL'] = Util::baseUrl();
         extract($args, EXTR_SKIP);
 
-        $file = VIEWS."$header.php";
+        $file = VIEWS . "$header.php";
         if (is_readable($file)) {
             require $file;
         } else {
@@ -19,8 +19,7 @@ class View
         }
 
         foreach ($views as $view) {
-            $file = VIEWS."$view.php";
-
+            $file = VIEWS . "$view.php";
             if (is_readable($file)) {
                 require $file;
             } else {
@@ -28,12 +27,13 @@ class View
             }
         }
 
-        $file = VIEWS."$footer.php";
+        $file = VIEWS . "$footer.php";
         if (is_readable($file)) {
             require $file;
         } else {
             throw new Exception("$file not found");
         }
+
         exit;
     }
 
@@ -41,7 +41,7 @@ class View
     {
         $response = json_encode($data);
         http_response_code($code);
-        header("Content-type: application/json; charset=".$charset);
+        header("Content-type: application/json; charset=" . $charset);
         echo $response;
         exit;
     }

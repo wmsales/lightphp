@@ -2,12 +2,11 @@
 
 namespace App\Model;
 
-use Medoo\Medoo;
 use Core\Database;
 
-class User
+class Role
 {
-    protected $table = 'users';
+    protected $table = 'roles';
     protected $db;
 
     public function __construct()
@@ -15,12 +14,12 @@ class User
         $this->db = (new Database())->getORM();
     }
 
-    public function getAllUsers(): array
+    public function getAllRoles(): array
     {
         return $this->db->select($this->table, '*');
     }
 
-    public function getUserById(int $id): array
+    public function getRoleById(int $id): array
     {
         return $this->db->select($this->table, '*', ['id' => $id]);
     }

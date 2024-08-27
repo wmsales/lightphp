@@ -16,11 +16,11 @@ class Role
 
     public function getAllRoles(): array
     {
-        return $this->db->select($this->table, ['*']);
+        return $this->db->select($this->table, ['nombre','descripcion']);
     }
 
     public function getRoleById(int $id): array
     {
-        return $this->db->select($this->table, ['*'], ['id' => $id]);
+        return $this->db->select($this->table, ['nombre','descripcion'], ['id' => $id]);
     }
 }

@@ -1,7 +1,6 @@
 <?php
 
-require '../vendor/autoload.php';
-
+require dirname(__DIR__) . '/vendor/autoload.php'; // Ruta absoluta al autoload
 use App\Model\Role;
 
 $roleModel = new Role();

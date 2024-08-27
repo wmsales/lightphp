@@ -2,7 +2,6 @@
 
 namespace App\Model;
 
-use Medoo\Medoo;
 use Core\Database;
 
 class User
@@ -17,11 +16,11 @@ class User
 
     public function getAllUsers(): array
     {
-        return $this->db->select($this->table, ['*']);
+        return $this->db->select($this->table, '*');
     }
 
     public function getUserById(int $id): array
     {
-        return $this->db->select($this->table, ['*'], ['id' => $id]);
+        return $this->db->select($this->table, '*', ['id' => $id]);
     }
 }

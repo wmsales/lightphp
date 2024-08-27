@@ -7,19 +7,33 @@ Inicia el desarrollo de tu aplicación PHP partiendo del modelo de MVC, con los 
 
 Para usar este proyecto toma en cuenta que debes tener PHP 7.5 o superior.
 
+Instalar el template:
 ```bash
-  git clone
+  git clone <enlace-del-proyecto>
 ```
-Luego:
+
+Mover a la carpeta:
+```bash
+  cd <carpeta-del-proyecto>
+```
+
+Copiar las variables de entorno y configurarlas:
+```bash
+  cp .env.example .env
+```
+
+Instalar librerias necesarias:
+```bash
+  composer install
+``` 
+
+## Levantar un servidor local
+
+Si deseas ver tu aplicación en acción rápidamente, puedes usar el servidor web incorporado en PHP: 
 
 ```bash
-  composer dump-autoload 
-``` 
-Carga el ORM:
-```bash
-  composer require catfan/medoo
-``` 
-
+php -S localhost:8000 -t public
+```
 
 ## Licencia
 

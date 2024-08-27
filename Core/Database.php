@@ -1,17 +1,32 @@
 <?php
 
+require '../vendor/autoload.php';
+
 use Medoo\Medoo;
+use Dotenv\Dotenv;
 
-$database = new Medoo([
-    'type' => 'mysql',
-    'host' => 'localhost',
-    'database' => 'nombre_de_tu_base_de_datos',
-    'username' => 'tu_usuario',
-    'password' => 'tu_contraseña'
-]);
+class Database
+{
+    private $database;
 
-return $database;
+    public function __construct()
+    {
+        $dotenv = Dotenv::createImmutable(__DIR__ . '/../');
+        $dotenv->load();
 
+        // Config base de datos
+        $this->database = new Medoo([
+            'type' => 'mysql',
+            'host' => $_ENV['DB_HOST'],
+            'database' => $_ENV['DB_NAME'],
+            'username' => $_ENV['DB_USER'],
+            'password' => $_ENV['DB_PASS']
+        ]);
+    }
 
-
-?>
+    // Obtener la instancia de la db para poder hacer consultas
+    public function getDbConn(): Medoo
+    {
+        return $this->database;
+    }
+}

@@ -1,18 +1,23 @@
 {
     "name": "wmsales/lightphp",
-    "description": "Liberia Ligera para PHP (modelo MVC)",
+    "description": "Framework Ligero para PHP Basado en MVC",
     "type": "project",
     "license": "MIT",
     "authors": [
         {
             "name": "wmsales",
             "email": "salesjerez@gmail.com"
+        },
+        {
+            "name": "DavidDevGT",
+            "email": "josuedavidvl18@gmail.com"
         }
     ],
     "minimum-stability": "stable",
 	"require": {
-		"php": ">=7.0",
-        "catfan/medoo": "^2.1"
+		"php": ">=7.5",
+        "catfan/medoo": "^2.1",
+        "vlucas/phpdotenv": "^5.6"
 	},
     "autoload":
     {

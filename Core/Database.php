@@ -1,5 +1,7 @@
 <?php
 
+namespace Core;
+
 require '../vendor/autoload.php';
 
 use Medoo\Medoo;
@@ -16,7 +18,7 @@ class Database
 
         // Config base de datos
         $this->database = new Medoo([
-            'type' => 'mysql',
+            'type' => $_ENV['DB_DRIVER'],
             'host' => $_ENV['DB_HOST'],
             'database' => $_ENV['DB_NAME'],
             'username' => $_ENV['DB_USER'],
@@ -25,8 +27,14 @@ class Database
     }
 
     // Obtener la instancia de la db para poder hacer consultas
-    public function getDbConn(): Medoo
+    public function getORM(): Medoo
     {
         return $this->database;
     }
 }
+
+// Como usarlo:
+// $db = new Database();
+// $result = $db->getORM()->select('roles', ['nombre', 'descripcion']);
+
+// print_r($result);

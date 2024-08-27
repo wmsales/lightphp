@@ -1,0 +1,11 @@
+#!/usr/bin/env php
+<?php
+
+require 'vendor/autoload.php';
+
+use Core\Crafter;
+
+$command = $argv[1] ?? null;
+
+$handler = new Crafter();
+$handler->run($command, array_slice($argv, 2));

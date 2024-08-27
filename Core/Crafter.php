@@ -25,6 +25,15 @@ class Crafter
             case 'migrate':
                 $this->handleMigrate($arguments);
                 break;
+            case 'migrate:dump':
+                $this->handleMigrateDump($arguments);
+                break;
+            case 'migrate:diff':
+                $this->handleMigrateDiff($arguments);
+                break;
+            case 'migrate:status':
+                $this->handleMigrateStatus($arguments);
+                break;
             case 'create:migration':
                 $this->handleCreateMigration($arguments);
                 break;
@@ -69,12 +78,15 @@ class Crafter
 
     protected function handleMigrateInit()
     {
-        exec('php vendor/bin/phoenix init', $output, $return_var);
-        echo implode("\n", $output) . "\n";
-        if ($return_var === 0) {
-            echo "Phoenix initialized successfully.\n";
+        exec('php vendor/bin/phoenix init 2>&1', $output, $return_var);
+        $outputString = implode("\n", $output);
+
+        if (strpos($outputString, 'Phoenix was already initialized') !== false) {
+            echo "Migrations have already been initialized.\n Run migrate or rollback commands now.\n";
+        } elseif ($return_var === 0) {
+            echo "Migrate component initialized successfully.\n";
         } else {
-            echo "An error occurred while initializing Phoenix.\n";
+            echo "An error occurred while initializing migrations.\n";
         }
     }
 
@@ -86,6 +98,39 @@ class Crafter
             echo "Migrations executed successfully.\n";
         } else {
             echo "An error occurred while executing migrations.\n";
+        }
+    }
+
+    protected function handleMigrateDump($arguments)
+    {
+        exec('php vendor/bin/phoenix dump', $output, $return_var);
+        echo implode("\n", $output) . "\n";
+        if ($return_var === 0) {
+            echo "Database dump created successfully.\n";
+        } else {
+            echo "An error occurred while creating the database dump.\n";
+        }
+    }
+
+    protected function handleMigrateDiff($arguments)
+    {
+        exec('php vendor/bin/phoenix diff', $output, $return_var);
+        echo implode("\n", $output) . "\n";
+        if ($return_var === 0) {
+            echo "Database diff migration created successfully.\n";
+        } else {
+            echo "An error occurred while creating the database diff migration.\n";
+        }
+    }
+
+    protected function handleMigrateStatus($arguments)
+    {
+        exec('php vendor/bin/phoenix status', $output, $return_var);
+        echo implode("\n", $output) . "\n";
+        if ($return_var === 0) {
+            echo "Migration status displayed successfully.\n";
+        } else {
+            echo "An error occurred while displaying the migration status.\n";
         }
     }
 
@@ -148,6 +193,7 @@ class Crafter
         echo "All cache cleared.\n";
     }
 
+
     protected function showHelp()
     {
         echo "                                                                                                                  
@@ -161,7 +207,7 @@ class Crafter
   \___| |_|   \__,_|  |_|    \__|  \___|  |_|            \___| |____| |___|  
                                                                              
                                                                                                                   \n\n";
-        echo "  migrate:init       Initialize Phoenix for migrations\n";
+        echo "  migrate:init       Initialize migrations\n";
         echo "  migrate            Run database migrations\n";
         echo "  create:migration   Create a new migration\n";
         echo "  rollback           Rollback the last migration\n";
@@ -169,7 +215,7 @@ class Crafter
         echo "  create:controller  Create a new controller\n";
         echo "  create:view        Create a new view\n";
         echo "  cache:clear        Clear application cache\n";
-        echo "\nSupported adapters:\n";
+        echo "\nAvailable Migration Drivers:\n";
         echo "  - MySQL\n";
         echo "  - PostgreSQL\n";
         echo "\nUsage:\n";

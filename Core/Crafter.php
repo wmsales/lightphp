@@ -4,6 +4,13 @@ namespace Core;
 
 class Crafter
 {
+    private $cache;
+
+    public function __construct()
+    {
+        $this->cache = new Cache(); // Instancia de Cache
+    }
+    
     public function run($command, $arguments)
     {
         if (is_null($command)) {
@@ -89,22 +96,23 @@ class Crafter
 
     protected function handleCacheClear()
     {
-        // codigo para limpiar el cache 
-        echo "Cache cleared.\n";
+        $this->cache->clear();  // Limpia toda la caché
+        echo "All cache cleared.\n";
     }
+
 
     protected function showHelp()
     {
         echo "                                                                                                                  
                                                                (      (     
-   (                  (         )                        (     )\ )   )\ )  
-   )\    (        )   )\ )   ( /(     (    (             )\   (()/(  (()/(  
- (((_)   )(    ( /(  (()/(   )\())   ))\   )(    ___   (((_)   /(_))  /(_)) 
- )\___  (()\   )(_))  /(_)) (_))/   /((_) (()\  |___|  )\___  (_))   (_))   
-((/ __|  ((_) ((_)_  (_) _| | |_   (_))    ((_)       ((/ __| | |    |_ _|  
- | (__  | '_| / _` |  |  _| |  _|  / -_)  | '_|        | (__  | |__   | |   
-  \___| |_|   \__,_|  |_|    \__|  \___|  |_|           \___| |____| |___|  
-                                                                            
+   (                  (         )                         (     )\ )   )\ )  
+   )\    (        )   )\ )   ( /(     (    (              )\   (()/(  (()/(  
+ (((_)   )(    ( /(  (()/(   )\())   ))\   )(           (((_)   /(_))  /(_)) 
+ )\___  (()\   )(_))  /(_)) (_))/   /((_) (()\          )\___  (_))   (_))   
+((/ __|  ((_) ((_)_  (_) _| | |_   (_))    ((_)   ___  ((/ __| | |    |_ _|  
+ | (__  | '_| / _` |  |  _| |  _|  / -_)  | '_|  |___|  | (__  | |__   | |   
+  \___| |_|   \__,_|  |_|    \__|  \___|  |_|            \___| |____| |___|  
+                                                                             
                                                                                                                   \n\n";
         echo "  migrate            Run database migrations\n";
         echo "  create:model       Create a new model\n";

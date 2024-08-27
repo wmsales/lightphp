@@ -10,31 +10,41 @@ use Dotenv\Dotenv;
 class Database
 {
     private $database;
+    private $cache;
 
     public function __construct()
     {
-        $dotenv = Dotenv::createImmutable(__DIR__ . '/../');
-        $dotenv->load();
+        $this->cache = new Cache(); // crear cache
 
-        // Config base de datos
-        $this->database = new Medoo([
-            'type' => $_ENV['DB_DRIVER'],
-            'host' => $_ENV['DB_HOST'],
-            'database' => $_ENV['DB_NAME'],
-            'username' => $_ENV['DB_USER'],
-            'password' => $_ENV['DB_PASS']
-        ]);
+        $config = $this->cache->get('db_config');
+
+        if (!$config) {
+            $dotenv = Dotenv::createImmutable(__DIR__ . '/../');
+            $dotenv->load();
+
+            // Config base de datos
+            $config = [
+                'type' => $_ENV['DB_DRIVER'],
+                'host' => $_ENV['DB_HOST'],
+                'database' => $_ENV['DB_NAME'],
+                'username' => $_ENV['DB_USER'],
+                'password' => $_ENV['DB_PASS'],
+            ];
+
+            // guardar en cache
+            $this->cache->set('db_config', $config);
+        }
+
+        $this->database = new Medoo($config);
     }
 
-    // Obtener la instancia de la db para poder hacer consultas
     public function getORM(): Medoo
     {
         return $this->database;
     }
 }
 
-// Como usarlo:
+// Ejemplo de uso:
 // $db = new Database();
 // $result = $db->getORM()->select('roles', ['nombre', 'descripcion']);
-
 // print_r($result);

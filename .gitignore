@@ -8,8 +8,40 @@ composer.lock
 # Variables
 #-------------------------
 .env
+.env.local
+.env.*.local
+.env.test
+.env.test.local
 
 #-------------------------
 # Cache
 #-------------------------
 var/cache/
+
+#-------------------------
+# Logs
+#-------------------------
+var/logs/
+var/sessions/
+*.log
+
+#-------------------------
+# PHPUnit
+#-------------------------
+phpunit.xml
+phpunit.xml.dist
+
+#-------------------------
+# IDEs and Editors
+#-------------------------
+.idea/
+.vscode/
+nbproject/
+.DS_Store
+Thumbs.db
+
+#-------------------------
+# System Files
+#-------------------------
+.DS_Store
+Thumbs.db

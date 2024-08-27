@@ -2,40 +2,19 @@
 
 namespace Core;
 
-require '../vendor/autoload.php';
-
 use Medoo\Medoo;
-use Dotenv\Dotenv;
 
 class Database
 {
     private $database;
-    private $cache;
+    private $config;
 
     public function __construct()
     {
-        $this->cache = new Cache(); // crear cache
+        $bootstrap = new Bootstrap();
+        $this->config = $bootstrap->getConfig()['db'];
 
-        $config = $this->cache->get('db_config');
-
-        if (!$config) {
-            $dotenv = Dotenv::createImmutable(__DIR__ . '/../');
-            $dotenv->load();
-
-            // Config base de datos
-            $config = [
-                'type' => $_ENV['DB_DRIVER'],
-                'host' => $_ENV['DB_HOST'],
-                'database' => $_ENV['DB_NAME'],
-                'username' => $_ENV['DB_USER'],
-                'password' => $_ENV['DB_PASS'],
-            ];
-
-            // guardar en cache
-            $this->cache->set('db_config', $config);
-        }
-
-        $this->database = new Medoo($config);
+        $this->database = new Medoo($this->config);
     }
 
     public function getORM(): Medoo
@@ -43,8 +22,3 @@ class Database
         return $this->database;
     }
 }
-
-// Ejemplo de uso:
-// $db = new Database();
-// $result = $db->getORM()->select('roles', ['nombre', 'descripcion']);
-// print_r($result);

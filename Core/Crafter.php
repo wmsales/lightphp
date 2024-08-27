@@ -10,7 +10,7 @@ class Crafter
     {
         $this->cache = new Cache(); // Instancia de Cache
     }
-    
+
     public function run($command, $arguments)
     {
         if (is_null($command)) {
@@ -19,8 +19,17 @@ class Crafter
         }
 
         switch ($command) {
+            case 'migrate:init':
+                $this->handleMigrateInit();
+                break;
             case 'migrate':
                 $this->handleMigrate($arguments);
+                break;
+            case 'create:migration':
+                $this->handleCreateMigration($arguments);
+                break;
+            case 'rollback':
+                $this->handleRollback($arguments);
                 break;
             case 'create:model':
                 $this->handleCreateModel($arguments);
@@ -52,16 +61,55 @@ class Crafter
         // Crear archivo
         file_put_contents($filePath, $content);
 
-        // permisos en Linux
+        // Permisos en Linux
         if (function_exists('chmod')) {
             chmod($filePath, 0644);
         }
     }
 
+    protected function handleMigrateInit()
+    {
+        exec('php vendor/bin/phoenix init', $output, $return_var);
+        echo implode("\n", $output) . "\n";
+        if ($return_var === 0) {
+            echo "Phoenix initialized successfully.\n";
+        } else {
+            echo "An error occurred while initializing Phoenix.\n";
+        }
+    }
+
     protected function handleMigrate($arguments)
     {
-        // codigo para manejar migraciones de base de datos
-        echo "Running migrations...\n";
+        exec('php vendor/bin/phoenix migrate', $output, $return_var);
+        echo implode("\n", $output) . "\n";
+        if ($return_var === 0) {
+            echo "Migrations executed successfully.\n";
+        } else {
+            echo "An error occurred while executing migrations.\n";
+        }
+    }
+
+    protected function handleCreateMigration($arguments)
+    {
+        $migrationName = $arguments[0] ?? 'NewMigration';
+        exec("php vendor/bin/phoenix create \"$migrationName\"", $output, $return_var);
+        echo implode("\n", $output) . "\n";
+        if ($return_var === 0) {
+            echo "Migration '$migrationName' created successfully.\n";
+        } else {
+            echo "An error occurred while creating the migration.\n";
+        }
+    }
+
+    protected function handleRollback($arguments)
+    {
+        exec('php vendor/bin/phoenix rollback', $output, $return_var);
+        echo implode("\n", $output) . "\n";
+        if ($return_var === 0) {
+            echo "Last migration rolled back successfully.\n";
+        } else {
+            echo "An error occurred while rolling back the migration.\n";
+        }
     }
 
     protected function handleCreateModel($arguments)
@@ -100,7 +148,6 @@ class Crafter
         echo "All cache cleared.\n";
     }
 
-
     protected function showHelp()
     {
         echo "                                                                                                                  
@@ -114,16 +161,24 @@ class Crafter
   \___| |_|   \__,_|  |_|    \__|  \___|  |_|            \___| |____| |___|  
                                                                              
                                                                                                                   \n\n";
+        echo "  migrate:init       Initialize Phoenix for migrations\n";
         echo "  migrate            Run database migrations\n";
+        echo "  create:migration   Create a new migration\n";
+        echo "  rollback           Rollback the last migration\n";
         echo "  create:model       Create a new model\n";
         echo "  create:controller  Create a new controller\n";
         echo "  create:view        Create a new view\n";
         echo "  cache:clear        Clear application cache\n";
+        echo "\nSupported adapters:\n";
+        echo "  - MySQL\n";
+        echo "  - PostgreSQL\n";
         echo "\nUsage:\n";
         echo "  crafter <command> [arguments]\n";
         echo "\nExamples:\n";
+        echo "  crafter migrate:init\n";
         echo "  crafter migrate\n";
-        echo "  crafter create:model User\n";
+        echo "  crafter create:migration AddUsersTable\n";
+        echo "  crafter rollback\n";
         echo "  crafter cache:clear\n";
     }
 }

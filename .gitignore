@@ -45,3 +45,12 @@ Thumbs.db
 #-------------------------
 .DS_Store
 Thumbs.db
+
+#-------------------------
+# Docker
+#-------------------------
+docker-compose.override.yml
+*.log
+*.pid
+*.pid.lock
+*.seed

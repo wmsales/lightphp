@@ -24,7 +24,9 @@ Copiar las variables de entorno y configurarlas:
 
 Instalar librerias necesarias:
 ```bash
+
   composer install
+composer update
 ``` 
 
 ## Levantar un servidor local

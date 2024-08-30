@@ -64,7 +64,7 @@ class Router
 
     private function callAction()
     {
-        if (method_exists($this->urlController, $this->urlAction) && is_callable([$this->urlController, $this->urlAction])) {
+        if (!is_null($this->urlAction) && method_exists($this->urlController, $this->urlAction) && is_callable([$this->urlController, $this->urlAction])) {
             if (!empty($this->urlParams)) {
                 call_user_func_array([$this->urlController, $this->urlAction], $this->urlParams);
             } else {
@@ -74,7 +74,7 @@ class Router
             $this->loadErrorPage();
         }
     }
-
+    
     private function loadErrorPage()
     {
         $page = new \App\Controllers\Error();

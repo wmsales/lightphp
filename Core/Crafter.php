@@ -160,7 +160,7 @@ class Crafter
     protected function handleCreateModel($arguments)
     {
         $modelName = $arguments[0] ?? 'NewModel';
-        $modelName = ucfirst($modelName) . 'Model';
+        $modelName = ucfirst($modelName);
         $filePath = "App/Model/{$modelName}.php";
 
         $this->createFile($filePath, "<?php\n\nnamespace App\\Model;\n\nclass $modelName\n{\n    // Model code here\n}\n");
@@ -170,7 +170,7 @@ class Crafter
     protected function handleCreateController($arguments)
     {
         $controllerName = $arguments[0] ?? 'NewController';
-        $controllerName = ucfirst($controllerName) . 'Controller';
+        $controllerName = ucfirst($controllerName);
         $filePath = "App/Controllers/{$controllerName}.php";
 
         $this->createFile($filePath, "<?php\n\nnamespace App\\Controllers;\n\nclass $controllerName\n{\n    // Controller code here\n}\n");

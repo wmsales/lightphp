@@ -8,25 +8,19 @@ class Home
 {
     public function index()
     {
-        $views = ['home/index'];
-        $args  = ['title' => 'Home'];
-        View::render($views, $args);
+        View::render(['home/index'], ['title' => 'Home']);
     }
 
     public function example()
     {
-        $views = ['home/example'];
-        $args  = ['title' => 'Home | Example'];
-        View::render($views, $args);
+        View::render(['home/example'], ['title' => 'Home | Example']);
     }
 
     public function exampleWithArgs($id = null)
     {
-        $views = ['home/example_with_args'];
-        $args  = [
+        View::render(['home/example_with_args'], [
             'title' => 'Home | Example',
-            'id' => $id ?? 'No se envio ID'
-        ];
-        View::render($views, $args);
+            'id' => $id ?? 'No se envió ID'
+        ]);
     }
 }

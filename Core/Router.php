@@ -4,80 +4,55 @@ namespace Core;
 
 class Router
 {
-    private $urlController = null;
-    private $urlAction     = null;
-    private $urlParams     = [];
+    private static $routes = [];
 
-    public function __construct()
+    public static function get($uri, $action)
     {
-        $this->splitUrl();
-        $this->routeRequest();
+        self::$routes['GET'][$uri] = $action;
     }
 
-    private function splitUrl()
+    public static function post($uri, $action)
     {
-        if (isset($_GET['url'])) {
-            $url = trim($_GET['url'], '/');
-            $url = filter_var($url, FILTER_SANITIZE_URL);
-            $url = explode('/', $url);
+        self::$routes['POST'][$uri] = $action;
+    }
 
-            $this->urlController = isset($url[0]) ? ucfirst($url[0]) : null;
-            $this->urlAction     = isset($url[1]) ? $url[1] : null;
+    public static function resolve()
+    {
+        $uri = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
+        $method = $_SERVER['REQUEST_METHOD'];
 
-            unset($url[0], $url[1]);
-
-            $this->urlParams = array_values($url);
+        foreach (self::$routes[$method] as $route => $action) {
+            $pattern = preg_replace('/\{[a-zA-Z]+\}/', '([a-zA-Z0-9_-]+)', $route);
+            if (preg_match("#^$pattern$#", $uri, $matches)) {
+                array_shift($matches);
+                return self::callAction($action, $matches);
+            }
         }
+
+        self::loadErrorPage();
     }
 
-    private function routeRequest()
+    private static function callAction($action, $params = [])
     {
-        if (!$this->urlController) {
-            $this->loadDefaultController();
-        } else {
-            $this->loadControllerAndAction();
-        }
-    }
-
-    private function loadDefaultController()
-    {
-        $page = new \App\Controllers\Home();
-        $page->index();
-    }
-
-    private function loadControllerAndAction()
-    {
-        $controllerPath = APP . 'Controllers/' . $this->urlController . '.php';
+        list($controller, $method) = explode('@', $action);
+        $controller = "\\App\\Controllers\\$controller";
         
-        if (file_exists($controllerPath)) {
-            $controller = '\\App\\Controllers\\' . $this->urlController;
-            if (class_exists($controller)) {
-                $this->urlController = new $controller();
-                $this->callAction();
-            } else {
-                $this->loadErrorPage();
-            }
+        if (class_exists($controller) && method_exists($controller, $method)) {
+            call_user_func_array([new $controller, $method], $params);
         } else {
-            $this->loadErrorPage();
+            self::loadErrorPage();
         }
     }
 
-    private function callAction()
+    private static function loadErrorPage()
     {
-        if (!is_null($this->urlAction) && method_exists($this->urlController, $this->urlAction) && is_callable([$this->urlController, $this->urlAction])) {
-            if (!empty($this->urlParams)) {
-                call_user_func_array([$this->urlController, $this->urlAction], $this->urlParams);
-            } else {
-                $this->urlController->{$this->urlAction}();
-            }
-        } else {
-            $this->loadErrorPage();
-        }
+        $controller = new \App\Controllers\Error();
+        $controller->pageNotFound();
     }
-    
-    private function loadErrorPage()
+
+    public static function loadRoutes()
     {
-        $page = new \App\Controllers\Error();
-        $page->pageNotFound($this->urlController, $this->urlAction);
+        require_once __DIR__ . '/../routes/web.php';
+        require_once __DIR__ . '/../routes/api.php';
     }
 }

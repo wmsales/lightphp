@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  php:
+    build:
+      context: ./php
+    volumes:
+      - ../:/var/www/html
+    networks:
+      - app-network
+
+  web:
+    build:
+      context: ./apache # Cambiar apache o nginx
+    volumes:
+      - ../:/var/www/html
+    ports:
+      - "8080:80"
+    networks:
+      - app-network
+
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASS}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASS}
+    ports:
+      - "3310:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - app-network
+
+volumes:
+  mysql_data:
+
+networks:
+  app-network:
+    driver: bridge

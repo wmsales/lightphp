@@ -11,3 +11,5 @@ require_once __DIR__ . '/../vendor/autoload.php';
 use Core\Router;
 
 $router = new Router();
+Router::loadRoutes();
+Router::resolve();
